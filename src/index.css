@@ -97,17 +97,15 @@ main {
 .map {
     width: 800px;
     height: 800px;
-    background-color: blue;
+    background-color: rgb(255, 255, 255);
 }
 .locations {
     width: 400px;
-    background-color: rgb(140, 140, 140);
 }
 
 .locations-list {
     overflow-y: auto;
     height: 650px;
-    background-color: rgb(255, 255, 255);
 }
 .location-info {
     border: 1px black solid;
@@ -124,7 +122,87 @@ main {
     margin-top: 5px;
     margin-right: 5px;
     background-color: rgb(134, 114, 153);
-    &:hover{
+    &:hover {
         background-color: rgb(107, 76, 137);
     }
+}
+.location-input {
+    margin: 7px;
+    height: 150px;
+    border: 2px black solid;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.location-input > input {
+    width: 250px;
+    height: 20px;
+    margin: 4px;
+}
+.location-input > button {
+    width: 100px;
+    height: 30px;
+    margin: 4px;
+    border: 1px black solid;
+    border-radius: 5px;
+    background-color: rgb(134, 114, 153);
+    &:hover {
+        background-color: rgb(107, 76, 137);
+    }
+}
+
+.loader {
+    margin-top: 300px;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top: 4px solid #333;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+.admin-page {
+    display: flex;
+    flex-wrap: wrap;
+}
+.admin-page > span {
+    height: 70px;
+    width: 1200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 25pt;
+}
+.admin-userinfo{
+    border: 2px black solid;
+    border-radius: 5px;
+    display: flex;
+    margin: 23px;
+    justify-content: space-around;
+    align-items: center;
+    width: 550px;
+    height: 50px;
+}
+.admin-userinfo>button{
+    width: 150px;
+    height: 30px;
+    border: 1px black solid;
+    border-radius: 5px;
+    background-color: rgb(134, 114, 153);
+    &:hover {
+        background-color: rgb(107, 76, 137);
+    }
+}
+.admin-span{
+    width: 150px;
 }

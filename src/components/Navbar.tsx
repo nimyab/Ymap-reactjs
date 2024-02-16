@@ -1,7 +1,8 @@
 import { Link, Outlet } from "react-router-dom";
 import userStore from "../store/userStore";
+import { observer } from "mobx-react-lite";
 
-const Navbar = () => {
+const Navbar = observer(() => {
     const isAuth = userStore.isAuth;
     const userRole = userStore.user.role;
 
@@ -13,13 +14,17 @@ const Navbar = () => {
                 {isAuth && userRole === "ADMIN" ? (
                     <Link to={"/adminPanel"}>Админская панель</Link>
                 ) : null}
-                {!isAuth ? <Link to={"/auth/login"}>Вход</Link> : <Link to={'/auth/logout'}>Выход</Link>}
+                {!isAuth ? (
+                    <Link to={"/auth/login"}>Вход</Link>
+                ) : (
+                    <Link to={"/auth/logout"}>Выход</Link>
+                )}
             </header>
             <main>
                 <Outlet />
             </main>
         </>
     );
-};
+});
 
 export default Navbar;

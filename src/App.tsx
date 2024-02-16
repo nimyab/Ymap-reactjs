@@ -7,16 +7,24 @@ import AdminPage from "./pages/AdminPage";
 import AdminValidate from "./components/AdminValidate";
 import MapPage from "./pages/MapPage";
 import AuthValidate from "./components/AuthValidate";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import userStore from "./store/userStore";
+import "./index.css";
+import Logout from "./components/Logout";
 
 function App() {
-    const navigate = useNavigate()
+    const [isLoading, setIsLoading] = useState(true);
+    const navigate = useNavigate();
     useEffect(() => {
-        userStore.getUserFromServer();
-        if(userStore.isAuth) navigate('/map');
+        userStore.getUserFromServer().then(() => {
+            setIsLoading(false);
+            if (userStore.isAuth) navigate("/map");
+        });
     }, []);
 
+    if (isLoading) {
+        return <div className="loader"></div>;
+    }
     return (
         <>
             <Routes>
@@ -42,6 +50,7 @@ function App() {
                 <Route path="/auth">
                     <Route path="login" element={<LoginPage />} />
                     <Route path="registration" element={<RegistrationPage />} />
+                    <Route path="logout" element={<Logout />} />
                 </Route>
             </Routes>
         </>

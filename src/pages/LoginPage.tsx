@@ -8,11 +8,10 @@ const LoginPage = observer(() => {
     const navigate = useNavigate();
 
     async function login(login: string, password: string) {
-        //await userStore.login(login, password);
-        window.alert('Вы вошли!');
-        userStore.isAuth = true;
-        console.log(login, password);
-        navigate("/", { replace: true });
+        await userStore.login(login, password);
+        if (userStore.isAuth) {
+            navigate("/map", { replace: true });
+        }
     }
 
     return (

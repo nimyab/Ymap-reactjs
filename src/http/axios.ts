@@ -1,41 +1,27 @@
 import Axios from "axios";
 import userStore from "../store/userStore";
+import { MyLocation, User } from "../utils/types";
 
 const axios = Axios.create({
-    baseURL: "localhost:8000/api",
+    baseURL: "http://localhost:8000/api",
     withCredentials: true,
 });
 
 axios.interceptors.request.use((config) => {
-    config.headers.Authorization = `Bearer ${localStorage.getItem(
-        "accessToken"
-    )}`;
+    config.headers.Authorization = `Bearer ${localStorage.getItem("token")}`;
+    config.headers.Accept = "application/json";
     return config;
 });
 
 axios.interceptors.response.use(
     (config) => config,
-    async (error) => {
-        const originalConfig = error.config;
-        //обрабатываем ошибку авторизации
-        if (error.response.status === 401 && !originalConfig._retry) {
-            originalConfig._retry = true;
-            try {
-                const data = (
-                    await Axios.get("http://localhost:5000/auth/refresh", {
-                        withCredentials: true,
-                    })
-                ).data;
-                localStorage.setItem("token", data.accessToken);
-                originalConfig.headers.Authorization = `Bearer ${data.accessToken}`;
-                return axios(originalConfig);
-            } catch (error) {
-                localStorage.removeItem("token");
-                userStore.isAuth = false;
-            }
+    (error) => {
+        if (error.response.status === 401) {
+            localStorage.removeItem("token");
+            userStore.isAuth = false;
+            userStore.user = {} as User;
         }
-        //если что-то другое то просто пробрасываем дальше
-        return Promise.reject(error);
+        return error.response;
     }
 );
 
@@ -46,16 +32,44 @@ class AxiosHttp {
             password,
         });
     }
-
     async registration(login: string, password: string) {
         return await axios.post("/auth/registration", {
             login,
             password,
         });
     }
+    async logout() {
+        return await axios.post("/auth/logout");
+    }
 
     async getUser() {
         return await axios.get("/user/current");
+    }
+
+    async getAllUsers() {
+        return await axios.get("/admin/users");
+    }
+    async giveAdminRole(id: number) {
+        return await axios.patch(`/admin/giveAdminRole/${id}`);
+    }
+
+    async getAllLocation() {
+        return await axios.get("/location/getAll");
+    }
+    async addLocation(name: string, latitude: number, longitude: number) {
+        return await axios.post("/location/create", {
+            name,
+            latitude,
+            longitude,
+        });
+    }
+    async updateLocation(data: MyLocation) {
+        return await axios.patch("location/update", {
+            ...data,
+        });
+    }
+    async deleteLocation(id: number) {
+        return await axios.delete(`location/delete/${id}`);
     }
 }
 

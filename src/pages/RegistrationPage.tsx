@@ -7,8 +7,7 @@ const RegistrationPage = () => {
     const navigate = useNavigate();
 
     async function registration(login: string, password: string) {
-        //await userStore.registration(login, password);
-        console.log(login, password);
+        await userStore.registration(login, password);
         navigate("/auth/login", { replace: true });
     }
 
