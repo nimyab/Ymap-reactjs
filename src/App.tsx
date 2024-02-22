@@ -11,9 +11,11 @@ import { useEffect, useState } from "react";
 import userStore from "./store/userStore";
 import "./index.css";
 import Logout from "./components/Logout";
+import NotificationPopup from "./components/NotificationPopup";
 
 function App() {
     const [isLoading, setIsLoading] = useState(true);
+
     const navigate = useNavigate();
     useEffect(() => {
         userStore.getUserFromServer().then(() => {
@@ -27,6 +29,7 @@ function App() {
     }
     return (
         <>
+        
             <Routes>
                 <Route path="/" element={<Navbar />}>
                     <Route index element={<MainPage />} />
@@ -53,6 +56,8 @@ function App() {
                     <Route path="logout" element={<Logout />} />
                 </Route>
             </Routes>
+            <NotificationPopup/>
+            
         </>
     );
 }

@@ -5,6 +5,7 @@ import "../index.css";
 import { observer } from "mobx-react-lite";
 import locationsStore from "../store/locationsStore";
 import { MyLocation } from "../utils/types";
+import notification from "../store/notification";
 
 const MapPage = observer(() => {
     const locations = locationsStore.myLocations;
@@ -28,15 +29,33 @@ const MapPage = observer(() => {
         latitude: number,
         longitude: number
     ) {
-        await locationsStore.addLocation(name, latitude, longitude);
+        locationsStore.addLocation(name, latitude, longitude).then((flag)=>{
+            if(!flag){
+                notification.setNotification("Неверные данные", "error");
+                return;
+            }
+            notification.setNotification('Метка успешно добавлена', 'success');
+        })
     }
 
     async function deleteLocation(id: number) {
-        await locationsStore.deleteLocation(id);
+        locationsStore.deleteLocation(id).then((flag)=>{
+            if(!flag){
+                notification.setNotification("Неверные данные", "error");
+                return;
+            }
+            notification.setNotification('Метка успешно удалена', 'success');
+        })
     }
 
     async function updateLocation(data: MyLocation) {
-        await locationsStore.updateLocation(data);
+        locationsStore.updateLocation(data).then((flag)=>{
+            if(!flag){
+                notification.setNotification("Неверные данные", "error");
+                return;
+            }
+            notification.setNotification('Метка обновлена', 'success');
+        })
     }
 
     if (isLoading) {

@@ -11,62 +11,60 @@ class MyLocations {
     }
 
     async addLocation(name: string, latitude: number, longitude: number) {
-        const locData = await AxiosHttp.addLocation(name, latitude, longitude);
-        console.log(locData);
-        if (locData.status === 200) {
+        try {
+            const locData = await AxiosHttp.addLocation(
+                name,
+                latitude,
+                longitude
+            );
             const location = locData.data;
-            this.myLocations = [
-                ...this.myLocations,
-                {
-                    id: location.id,
-                    name: location.name,
-                    latitude: location.latitude,
-                    longitude: location.longitude,
-                } as MyLocation,
-            ];
+            this.myLocations = [...this.myLocations, location as MyLocation];
+            return true;
+        } catch (error) {
+            return false;
         }
     }
 
     async updateLocation(data: MyLocation) {
-        const locData = await axios.updateLocation(data);
-        console.log(locData);
-        if (locData.status === 200) {
+        try {
+            const locData = await axios.updateLocation(data);
+            
             const updatedLocation = locData.data;
             const newLocation = this.myLocations.map((loc) => {
                 if (loc.id === updatedLocation.id) {
-                    return {
-                        id: updatedLocation.id,
-                        name: updatedLocation.name,
-                        latitude: updatedLocation.latitude,
-                        longitude: updatedLocation.longitude,
-                    } as MyLocation;
+                    return updatedLocation as MyLocation;
                 }
                 return loc;
             });
-            this.myLocations = [...newLocation];
+            this.myLocations = newLocation;
+            return true;
+        } catch (error) {
+            return false;
         }
     }
 
     async deleteLocation(id: number) {
-        const locData = await axios.deleteLocation(id);
-        console.log(locData);
-        if (locData.status === 200) {
+        try {
+            const locData = await axios.deleteLocation(id);
+            
+
             this.myLocations = this.myLocations.filter((loc) => loc.id != id);
+            return true;
+        } catch (error) {
+            return false;
         }
     }
 
     async getAllLocation() {
-        const locData = await AxiosHttp.getAllLocation();
-        if (locData.status === 200) {
+        try {
+            const locData = await AxiosHttp.getAllLocation();
             const locations = locData.data;
             this.myLocations = locations.map((location: any) => {
-                return {
-                    id: location.id,
-                    name: location.name,
-                    latitude: location.latitude,
-                    longitude: location.longitude,
-                } as MyLocation;
+                return location as MyLocation;
             });
+            return true;
+        } catch (error) {
+            return false;
         }
     }
 }

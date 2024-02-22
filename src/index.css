@@ -183,7 +183,7 @@ main {
     align-items: center;
     font-size: 25pt;
 }
-.admin-userinfo{
+.admin-userinfo {
     border: 2px black solid;
     border-radius: 5px;
     display: flex;
@@ -193,7 +193,7 @@ main {
     width: 550px;
     height: 50px;
 }
-.admin-userinfo>button{
+.admin-userinfo > button {
     width: 150px;
     height: 30px;
     border: 1px black solid;
@@ -203,6 +203,38 @@ main {
         background-color: rgb(107, 76, 137);
     }
 }
-.admin-span{
+.admin-span {
     width: 150px;
+}
+.alert {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    bottom: 5px;
+    right: 5px;
+    border-radius: 5px;
+    position: fixed;
+    width: 300px;
+    height: 60px;
+    border: 1px black solid;
+    opacity: 0;
+    transition: opacity 1s;
+}
+.success {
+    background-color: #53ae68;
+    color: #05260d;
+}
+.warning {
+    background-color: #8d7c46;
+    color: #322704;
+}
+.error {
+    background-color: #86444a;
+    color: #35080d;
+}
+.visible{
+    opacity: 1;
+}
+.hidden{
+    opacity: 0;
 }

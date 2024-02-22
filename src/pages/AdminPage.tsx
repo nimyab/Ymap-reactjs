@@ -2,35 +2,35 @@ import { useEffect, useState } from "react";
 import AxiosHttp from "../http/axios";
 import "../index.css";
 import { User } from "../utils/types";
+import notification from "../store/notification";
 
 const AdminPage = () => {
     const [users, setUsers] = useState<User[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
-        AxiosHttp.getAllUsers().then((dataUser) => {
-            setIsLoading(false);
-            if (dataUser.status === 200) {
+        AxiosHttp.getAllUsers()
+            .then((dataUser) => {
+                setIsLoading(false);
                 const users = dataUser.data.map((user: any) => {
-                    return {
-                        id: user.id,
-                        login: user.login,
-                        role: user.role,
-                    } as User;
+                    return user as User;
                 });
                 setUsers([...users]);
-            }
-        });
+            })
+            .catch(() => {
+                notification.setNotification("Ошибка", "error");
+            });
     }, []);
 
     async function giveAdminRole(id: number) {
-        AxiosHttp.giveAdminRole(id).then((dataUser) => {
-            if (dataUser.status === 200) {
-                console.log(dataUser);
+        AxiosHttp.giveAdminRole(id)
+            .then(() => {
                 const index = users.findIndex((user) => user.id === id);
                 users[index].role = "ADMIN";
                 setUsers([...users]);
-            }
-        });
+            })
+            .catch(() => {
+                notification.setNotification("Не удалось выдать права", "error");
+            });
     }
 
     if (isLoading) {

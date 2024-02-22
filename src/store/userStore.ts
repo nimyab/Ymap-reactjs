@@ -11,45 +11,47 @@ class UserStore {
     }
 
     async login(login: string, password: string) {
-        const dataUser = await AxiosHttp.login(login, password);
-        if (dataUser.status === 200) {
+        try {
+            const dataUser = await AxiosHttp.login(login, password);
             const user = dataUser.data;
             localStorage.setItem("token", user.token);
             this.isAuth = true;
-            this.user = {
-                id: user.id,
-                login: user.login,
-                role: user.role,
-            };
-        } else {
-            window.alert(`error ${dataUser.data.message}`);
+            this.user = user as User;
+            return true;
+        } catch (error) {
+            return false;
         }
     }
 
     async registration(login: string, password: string) {
-        const dataUser = await AxiosHttp.registration(login, password);
-        window.alert(dataUser.data.message);
+        try {
+            await AxiosHttp.registration(login, password);
+            return true;
+        } catch (error) {
+            return false;
+        }
     }
 
     async getUserFromServer() {
-        const dataUser = await AxiosHttp.getUser();
-        if (dataUser.status === 200) {
-            const user = dataUser.data;
+        try {
+            const dataUser = await AxiosHttp.getUser();
             this.isAuth = true;
-            this.user = {
-                id: user.id,
-                login: user.login,
-                role: user.role,
-            };
+            this.user = dataUser.data as User;
+            return true;
+        } catch (error) {
+            return false;
         }
     }
 
     async logout() {
-        const dataUser = await AxiosHttp.logout();
-        if (dataUser.status === 200) {
+        try {
+            await AxiosHttp.logout();
             this.user = {} as User;
             this.isAuth = false;
             localStorage.removeItem("token");
+            return true;
+        } catch (error) {
+            return false;
         }
     }
 }

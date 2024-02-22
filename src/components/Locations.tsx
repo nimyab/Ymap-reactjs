@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { MyLocation } from "../utils/types";
+import notification from "../store/notification";
 
 type LocationsProps = {
     locations: MyLocation[];
@@ -15,8 +16,8 @@ const Locations = ({ ...props }: LocationsProps) => {
     const [textButton, setTextButton] = useState("Добавить");
     const [id, setId] = useState<number>();
     const [name, setName] = useState("");
-    const [latitude, setLatitude] = useState(0);
-    const [longitude, setLongitude] = useState(0);
+    const [latitude, setLatitude] = useState<number>(0);
+    const [longitude, setLongitude] = useState<number>(0);
     function addLocation() {
         if (
             name.trim().length &&
@@ -26,13 +27,34 @@ const Locations = ({ ...props }: LocationsProps) => {
             longitude <= 180
         ) {
             props.addLoc(name, latitude, longitude);
-        }
+        } else notification.setNotification("Неверные данные", "error");
         setName("");
         setLatitude(0);
         setLongitude(0);
     }
 
-    function updateLocation(location: MyLocation) {
+    function updateLocation() {
+        if (
+            name.trim().length &&
+            -90 <= latitude &&
+            latitude <= 90 &&
+            -180 <= longitude &&
+            longitude <= 180
+        ) {
+            props.updateLoc({
+                id,
+                latitude,
+                longitude,
+                name,
+            } as MyLocation);
+        } else notification.setNotification("Неверные данные", "error");
+        setName("");
+        setLatitude(0);
+        setLongitude(0);
+        setTextButton("Добавить");
+    }
+
+    function updateModLocation(location: MyLocation) {
         setTextButton("Изменить");
         setId(location.id);
         setName(location.name);
@@ -49,7 +71,7 @@ const Locations = ({ ...props }: LocationsProps) => {
                         <span>Широта: {location.latitude}</span>
                         <span>Долгота: {location.longitude}</span>
                         <div>
-                            <button onClick={() => updateLocation(location)}>
+                            <button onClick={() => updateModLocation(location)}>
                                 Изменить
                             </button>
                             <button
@@ -95,24 +117,7 @@ const Locations = ({ ...props }: LocationsProps) => {
                         if (textButton === "Добавить") {
                             addLocation();
                         } else {
-                            if (
-                                name.trim().length &&
-                                -90 <= latitude &&
-                                latitude <= 90 &&
-                                -180 <= longitude &&
-                                longitude <= 180
-                            ) {
-                                props.updateLoc({
-                                    id: id,
-                                    latitude: latitude,
-                                    longitude: longitude,
-                                    name: name,
-                                } as MyLocation);
-                            }
-                            setName("");
-                            setLatitude(0);
-                            setLongitude(0);
-                            setTextButton("Добавить");
+                            updateLocation();
                         }
                     }}
                 >

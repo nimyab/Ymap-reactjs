@@ -21,7 +21,7 @@ axios.interceptors.response.use(
             userStore.isAuth = false;
             userStore.user = {} as User;
         }
-        return error.response;
+        throw error;
     }
 );
 
