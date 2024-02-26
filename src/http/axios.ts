@@ -49,9 +49,9 @@ class AxiosHttp {
     async getAllUsers() {
         return await axios.get("/admin/users");
     }
-    async giveAdminRole(id: number) {
-        return await axios.patch(`/admin/giveAdminRole/${id}`);
-    }
+    // async giveAdminRole(id: number) {
+    //     return await axios.patch(`/admin/giveAdminRole/${id}`);
+    // }
 
     async getAllLocation() {
         return await axios.get("/location/getAll");

@@ -21,17 +21,17 @@ const AdminPage = () => {
             });
     }, []);
 
-    async function giveAdminRole(id: number) {
-        AxiosHttp.giveAdminRole(id)
-            .then(() => {
-                const index = users.findIndex((user) => user.id === id);
-                users[index].role = "ADMIN";
-                setUsers([...users]);
-            })
-            .catch(() => {
-                notification.setNotification("Не удалось выдать права", "error");
-            });
-    }
+    // async function giveAdminRole(id: number) {
+    //     AxiosHttp.giveAdminRole(id)
+    //         .then(() => {
+    //             const index = users.findIndex((user) => user.id === id);
+    //             users[index].role = "ADMIN";
+    //             setUsers([...users]);
+    //         })
+    //         .catch(() => {
+    //             notification.setNotification("Не удалось выдать права", "error");
+    //         });
+    // }
 
     if (isLoading) {
         return (
@@ -58,9 +58,7 @@ const AdminPage = () => {
                         {user.role === "ADMIN" ? (
                             <span className="admin-span">Уже админ</span>
                         ) : (
-                            <button onClick={() => giveAdminRole(user.id)}>
-                                Сделать админом
-                            </button>
+                            <span className="admin-span">Не админ</span>
                         )}
                     </div>
                 ))}

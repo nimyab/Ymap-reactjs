@@ -18,8 +18,10 @@ class MyLocations {
                 longitude
             );
             const location = locData.data;
+            
             this.myLocations = [...this.myLocations, location as MyLocation];
             return true;
+
         } catch (error) {
             return false;
         }
@@ -45,9 +47,7 @@ class MyLocations {
 
     async deleteLocation(id: number) {
         try {
-            const locData = await axios.deleteLocation(id);
-            
-
+            await axios.deleteLocation(id);
             this.myLocations = this.myLocations.filter((loc) => loc.id != id);
             return true;
         } catch (error) {

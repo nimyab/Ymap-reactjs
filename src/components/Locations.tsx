@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { MyLocation } from "../utils/types";
-import notification from "../store/notification";
 
 type LocationsProps = {
     locations: MyLocation[];
@@ -16,41 +15,26 @@ const Locations = ({ ...props }: LocationsProps) => {
     const [textButton, setTextButton] = useState("Добавить");
     const [id, setId] = useState<number>();
     const [name, setName] = useState("");
-    const [latitude, setLatitude] = useState<number>(0);
-    const [longitude, setLongitude] = useState<number>(0);
+    const [latitude, setLatitude] = useState("");
+    const [longitude, setLongitude] = useState("");
     function addLocation() {
-        if (
-            name.trim().length &&
-            -90 <= latitude &&
-            latitude <= 90 &&
-            -180 <= longitude &&
-            longitude <= 180
-        ) {
-            props.addLoc(name, latitude, longitude);
-        } else notification.setNotification("Неверные данные", "error");
+        console.log(parseFloat(latitude), latitude);
+        props.addLoc(name, parseFloat(latitude), parseFloat(longitude));
         setName("");
-        setLatitude(0);
-        setLongitude(0);
+        setLatitude("");
+        setLongitude("");
     }
 
     function updateLocation() {
-        if (
-            name.trim().length &&
-            -90 <= latitude &&
-            latitude <= 90 &&
-            -180 <= longitude &&
-            longitude <= 180
-        ) {
-            props.updateLoc({
-                id,
-                latitude,
-                longitude,
-                name,
-            } as MyLocation);
-        } else notification.setNotification("Неверные данные", "error");
+        props.updateLoc({
+            id,
+            latitude: parseFloat(latitude),
+            longitude: parseFloat(longitude),
+            name,
+        } as MyLocation);
         setName("");
-        setLatitude(0);
-        setLongitude(0);
+        setLatitude("");
+        setLongitude("");
         setTextButton("Добавить");
     }
 
@@ -58,8 +42,8 @@ const Locations = ({ ...props }: LocationsProps) => {
         setTextButton("Изменить");
         setId(location.id);
         setName(location.name);
-        setLatitude(location.latitude);
-        setLongitude(location.longitude);
+        setLatitude(location.latitude.toString());
+        setLongitude(location.longitude.toString());
     }
 
     return (
@@ -104,13 +88,13 @@ const Locations = ({ ...props }: LocationsProps) => {
                     type="text"
                     placeholder="Широта"
                     value={latitude}
-                    onChange={(e) => setLatitude(Number(e.target.value))}
+                    onChange={(e) => setLatitude(e.target.value)}
                 />
                 <input
                     type="text"
                     placeholder="Долгота"
                     value={longitude}
-                    onChange={(e) => setLongitude(Number(e.target.value))}
+                    onChange={(e) => setLongitude(e.target.value)}
                 />
                 <button
                     onClick={() => {
